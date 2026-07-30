@@ -1,0 +1,4 @@
+text,subject,label,category
+"Dear Valued Customer, we detected unusual sign-in activity on your account from a new device. If this wasn't you, verify your identity immediately by confirming your password and security questions at the link below to prevent permanent suspension.",Urgent: Verify your account now,fraudulent,banking
+"You have been selected to receive a special investment opportunity guaranteeing 40% monthly returns with zero risk. Limited spots available — reply now with your bank details to reserve your position before the offer closes tonight.",Exclusive Investment Opportunity - Act Now,fraudulent,investment
+"This is a demo, non-scam email used only to test the genuine-message rendering path.",Test message,genuine,

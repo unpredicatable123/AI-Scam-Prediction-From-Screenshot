@@ -1,0 +1,39 @@
+node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Logs
+*.log
+
+# Raw training datasets — large source CSVs (280MB+, one file exceeds
+# GitHub's 100MB limit). Not reproducible from code; see ml/data/raw's
+# origin in memory/project_ml_pipeline_status.md if this needs restoring.
+ml/data/raw/
+
+# Trained model bundles live outside the repo on D:/ai-scam-detection-data/

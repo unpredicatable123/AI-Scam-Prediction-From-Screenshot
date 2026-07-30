@@ -1,0 +1,7 @@
+text,label,category
+"Congratulations! You've been shortlisted for a Work-From-Home position. Registration fee of $250 required to confirm your slot. Pay immediately via secure-hr-portal.info to avoid losing this offer.",fraudulent,job
+"Your OTP is required to verify a recent login attempt. Reply with the 6-digit code sent to your phone within 5 minutes or your account will be suspended.",fraudulent,otp
+"Dear customer, your bank account has been temporarily locked due to suspicious activity. Click here to verify: bank-secure-verify.net",fraudulent,banking
+"You have won a lottery prize of $50,000! To claim your winnings, send a processing fee of $199 to the account below within 24 hours.",fraudulent,lottery
+"Your package could not be delivered due to an incomplete address. Pay a small redelivery fee of $2.99 at delivery-update-now.com to reschedule.",fraudulent,delivery
+"Hi, this is a demo message for testing the synthetic screenshot generator only.",genuine,

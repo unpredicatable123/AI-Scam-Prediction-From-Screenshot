@@ -1,0 +1,242 @@
+@import 'tailwindcss';
+
+@import '@fontsource/geist-sans/400.css';
+@import '@fontsource/geist-sans/500.css';
+@import '@fontsource/geist-sans/600.css';
+@import '@fontsource/geist-sans/700.css';
+@import '@fontsource/geist-mono/400.css';
+@import '@fontsource/geist-mono/500.css';
+
+/* ==========================================================================
+   Design tokens — static palette + type/radius/shadow/easing scales.
+   Everything here compiles to Tailwind utilities (bg-violet-500, ease-out-expo, ...).
+   Components must never reference these raw tokens directly — use the
+   semantic layer below (--surface-*, --text-*, --accent-*) so theme
+   switching is a token-file change, not a component rewrite.
+   ========================================================================== */
+@theme {
+	--font-sans: 'Geist Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+	/* Fluid type scale — clamps between mobile and desktop viewports */
+	--text-xs: clamp(0.75rem, 0.71rem + 0.18vw, 0.8125rem);
+	--text-sm: clamp(0.8125rem, 0.77rem + 0.2vw, 0.9375rem);
+	--text-base: clamp(0.9375rem, 0.89rem + 0.25vw, 1.0625rem);
+	--text-lg: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+	--text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+	--text-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.875rem);
+	--text-3xl: clamp(1.875rem, 1.6rem + 1.35vw, 2.5rem);
+	--text-4xl: clamp(2.25rem, 1.85rem + 2vw, 3.25rem);
+	--text-5xl: clamp(2.75rem, 2.1rem + 3.25vw, 4.5rem);
+	--text-6xl: clamp(3.25rem, 2.3rem + 4.75vw, 6rem);
+
+	/* Neutral scale — cool, slightly blue-tinted near-black. Dark-first. */
+	--color-neutral-0: oklch(1 0 0);
+	--color-neutral-50: oklch(0.98 0.003 260);
+	--color-neutral-100: oklch(0.94 0.004 260);
+	--color-neutral-200: oklch(0.87 0.006 260);
+	--color-neutral-300: oklch(0.76 0.008 260);
+	--color-neutral-400: oklch(0.62 0.01 260);
+	--color-neutral-500: oklch(0.5 0.01 260);
+	--color-neutral-600: oklch(0.4 0.012 260);
+	--color-neutral-700: oklch(0.3 0.013 260);
+	--color-neutral-800: oklch(0.22 0.014 260);
+	--color-neutral-850: oklch(0.19 0.014 260);
+	--color-neutral-900: oklch(0.16 0.013 260);
+	--color-neutral-925: oklch(0.135 0.012 260);
+	--color-neutral-950: oklch(0.105 0.011 260);
+	--color-neutral-975: oklch(0.08 0.009 260);
+
+	/* Brand accents — plum (primary / "intelligence, depth") + lime (secondary /
+	   "signal, alert-worthy detail"). Deliberately not violet/cyan, the most
+	   repeated pairing across AI products — see memory/project_ui_redesign.md.
+	   Lime's hue sits near the risk-low/-safe green range, but the two token
+	   families are never cross-used on the same element (risk badges always
+	   pull --color-risk-*, brand accents always pull --accent-secondary), and
+	   lime is much lighter/higher-chroma than the muted risk tones, so they
+	   read as different kinds of color even when a hue wheel puts them close. */
+	--color-plum-300: oklch(0.82 0.1 322);
+	--color-plum-400: oklch(0.72 0.16 320);
+	--color-plum-500: oklch(0.6 0.2 318);
+	--color-plum-600: oklch(0.5 0.21 315);
+	--color-plum-700: oklch(0.4 0.19 312);
+
+	--color-lime-300: oklch(0.93 0.13 104);
+	--color-lime-400: oklch(0.87 0.19 100);
+	--color-lime-500: oklch(0.8 0.23 97);
+	--color-lime-600: oklch(0.7 0.22 95);
+
+	/* Risk bands — colour is never the only signal (paired with icon + label in UI) */
+	--color-risk-safe: oklch(0.72 0.17 152);
+	--color-risk-low: oklch(0.8 0.15 110);
+	--color-risk-medium: oklch(0.79 0.16 75);
+	--color-risk-high: oklch(0.71 0.19 45);
+	--color-risk-critical: oklch(0.62 0.23 25);
+
+	--radius-sm: 0.375rem;
+	--radius-md: 0.625rem;
+	--radius-lg: 0.875rem;
+	--radius-xl: 1.25rem;
+	--radius-2xl: 1.75rem;
+
+	--shadow-glow-plum: 0 0 0 1px oklch(0.6 0.2 318 / 0.25), 0 8px 30px -8px oklch(0.6 0.2 318 / 0.45);
+	--shadow-glow-lime: 0 0 0 1px oklch(0.8 0.23 97 / 0.3), 0 8px 30px -8px oklch(0.8 0.23 97 / 0.35);
+	--shadow-panel: 0 1px 0 0 oklch(1 0 0 / 0.04) inset, 0 20px 50px -20px oklch(0 0 0 / 0.6);
+
+	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+	--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+	--ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* ==========================================================================
+   Semantic tokens — theme-aware. Every component references these, never
+   the raw palette above. Default is dark; light values exist so the
+   authenticated app can offer a real toggle later without a token rewrite.
+   ========================================================================== */
+:root,
+:root[data-theme='dark'] {
+	--surface-canvas: var(--color-neutral-975);
+	--surface-base: var(--color-neutral-950);
+	--surface-raised: var(--color-neutral-900);
+	--surface-overlay: var(--color-neutral-850);
+
+	--border-subtle: oklch(1 0 0 / 0.07);
+	--border-default: oklch(1 0 0 / 0.12);
+	--border-strong: oklch(1 0 0 / 0.2);
+
+	--text-primary: var(--color-neutral-50);
+	--text-secondary: var(--color-neutral-300);
+	--text-tertiary: var(--color-neutral-500);
+
+	--accent-primary: var(--color-plum-500);
+	--accent-primary-strong: var(--color-plum-400);
+	--accent-secondary: var(--color-lime-500);
+
+	--glass-tint: oklch(1 0 0 / 0.04);
+}
+
+:root[data-theme='light'] {
+	--surface-canvas: var(--color-neutral-50);
+	--surface-base: var(--color-neutral-0);
+	--surface-raised: var(--color-neutral-0);
+	--surface-overlay: var(--color-neutral-100);
+
+	--border-subtle: oklch(0 0 0 / 0.06);
+	--border-default: oklch(0 0 0 / 0.1);
+	--border-strong: oklch(0 0 0 / 0.16);
+
+	--text-primary: var(--color-neutral-900);
+	--text-secondary: var(--color-neutral-600);
+	--text-tertiary: var(--color-neutral-400);
+
+	--accent-primary: var(--color-plum-600);
+	--accent-primary-strong: var(--color-plum-700);
+	--accent-secondary: var(--color-lime-600);
+
+	--glass-tint: oklch(0 0 0 / 0.03);
+}
+
+/* ==========================================================================
+   Custom utilities — the recurring visual primitives (glass, glow, gradient
+   text) referenced throughout the marketing and app UI.
+   ========================================================================== */
+@utility glass-panel {
+	background: color-mix(in oklch, var(--surface-raised) 72%, var(--glass-tint));
+	backdrop-filter: blur(20px) saturate(140%);
+	-webkit-backdrop-filter: blur(20px) saturate(140%);
+	border: 1px solid var(--border-subtle);
+	box-shadow: var(--shadow-panel);
+}
+
+@utility text-gradient-brand {
+	background: linear-gradient(115deg, var(--color-plum-400) 10%, var(--color-lime-400) 90%);
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+}
+
+@utility bg-grid {
+	background-image:
+		linear-gradient(to right, var(--border-subtle) 1px, transparent 1px),
+		linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
+	background-size: 48px 48px;
+}
+
+/* ==========================================================================
+   Base layer
+   ========================================================================== */
+@layer base {
+	html {
+		color-scheme: dark;
+		scroll-behavior: smooth;
+	}
+
+	body {
+		background: var(--surface-canvas);
+		color: var(--text-primary);
+		font-family: var(--font-sans);
+		font-feature-settings: 'cv11', 'ss01';
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+	}
+
+	::selection {
+		background: var(--accent-primary);
+		color: var(--color-neutral-0);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--accent-secondary);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
+
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	::-webkit-scrollbar-thumb {
+		background: var(--border-strong);
+		border-radius: 999px;
+		border: 2px solid var(--surface-canvas);
+	}
+}
+
+/* Hard CSS-level safety net. The JS motion layer (src/lib/motion) additionally
+   branches on this so scroll-pinned sequences degrade to a static end-state
+   instead of merely playing at zero duration mid-sequence. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+	html {
+		scroll-behavior: auto;
+	}
+}
+
+/* Report export (PrintReport.svelte) — hide the normal app chrome and show
+   only the print-report subtree. `visibility` (not `display`) so layout
+   calculation isn't disrupted for the one element that stays visible. */
+@media print {
+	body * {
+		visibility: hidden;
+	}
+	.print-report,
+	.print-report * {
+		visibility: visible;
+	}
+	.print-report {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		background: #fff;
+	}
+}

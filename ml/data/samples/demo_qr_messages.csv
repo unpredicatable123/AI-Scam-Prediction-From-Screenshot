@@ -1,0 +1,5 @@
+text,label,category
+"Scan this QR code to confirm your delivery has been rescheduled for today.",fraudulent,delivery
+"Your electricity bill is overdue. Scan the QR code below to make an immediate payment and avoid disconnection.",fraudulent,banking
+"Congratulations, you've been selected for a cashback reward! Scan to claim your ₹500 instantly to upi-rewards-claim.info",fraudulent,investment
+"Scan this code to complete your KYC verification and keep your account active.",fraudulent,banking
