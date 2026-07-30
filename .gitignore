@@ -36,4 +36,11 @@ venv/
 # origin in memory/project_ml_pipeline_status.md if this needs restoring.
 ml/data/raw/
 
+# Third-party real-world datasets downloaded for evaluation — licensing
+# terms unclear/citation-only for redistribution, kept local only.
+# See ml/data/external/README.md (tracked) for sources + how to re-fetch.
+ml/data/external/*.csv
+ml/data/external/mendeley_sms_phishing/
+ml/data/external/smishtank_dataset.csv
+
 # Trained model bundles live outside the repo on D:/ai-scam-detection-data/
