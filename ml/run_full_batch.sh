@@ -45,6 +45,12 @@ run python generate.py --input "data/raw/Enron.csv" --source-type email --output
 run python generate.py --input "data/raw/Ling.csv" --source-type email --output-dir $OUT \
   --text-cols "subject,body" --label-filter fraudulent --sample 200 --seed 111
 
+run python generate.py --input "data/external/mendeley_sms_phishing/Dataset_5971.csv" --source-type scam --output-dir $OUT \
+  --label-filter fraudulent --sample 400 --seed 112
+
+run python generate.py --input "data/external/smishtank_dataset.csv" --source-type scam --output-dir $OUT \
+  --text-col MainText --category-col "Message Categories" --label-filter fraudulent --sample 400 --seed 113
+
 echo "=== GENUINE ==="
 run python generate.py --input "data/raw/phishing_email.csv" --source-type phishing --output-dir $OUT \
   --label-filter genuine --sample 700 --seed 201
@@ -69,6 +75,9 @@ run python generate.py --input "data/raw/spam.csv" --source-type scam --output-d
 
 run python generate.py --input "data/raw/Ling.csv" --source-type email --output-dir $OUT \
   --text-cols "subject,body" --label-filter genuine --sample 200 --seed 208
+
+run python generate.py --input "data/external/mendeley_sms_phishing/Dataset_5971.csv" --source-type scam --output-dir $OUT \
+  --label-filter genuine --sample 400 --seed 209
 
 echo "=== QR (demo scam text + real QR images — flagged gap, see report) ==="
 run python generate.py --input "data/samples/demo_qr_messages.csv" --source-type qr --output-dir $OUT \

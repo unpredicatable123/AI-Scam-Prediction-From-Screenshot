@@ -6,7 +6,7 @@ REM close a window (or Ctrl+C in it) to stop that service.
 echo Freeing ports 8000 and 5173 if anything is already listening on them...
 powershell -NoProfile -Command "Get-NetTCPConnection -LocalPort 8000,5173 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }"
 
-set MODEL_DIR=D:\ai-scam-detection-data\model_v2
+set MODEL_DIR=D:\ai-scam-detection-data\model_v3
 
 echo Starting AI service (FastAPI) on port 8000...
 start "AI Service (FastAPI :8000)" cmd /k "cd /d %~dp0apps\ai-service&& set "MODEL_DIR=%MODEL_DIR%"&& python -m uvicorn app.main:app --port 8000"
