@@ -47,6 +47,23 @@ Every random choice (contact name, avatar colour, theme, device width,
 forwarded/unknown-number/business flags, bubble-colour jitter) is seeded per
 source row, so reruns are reproducible.
 
+## Running tests
+
+```sh
+pip install -r requirements-dev.txt
+pytest
+```
+
+Covers the pure feature-extraction functions in `src/features/` (lexicon
+matching, brand-typosquat detection, conversation-flow escalation analysis,
+the EXIF forensics signal, and the fusion/schema contract). These aren't
+placeholder tests — several lock in real bugs found by hand-testing earlier
+in the project (e.g. "now" matching inside "know", "axis" false-positiving
+on "basis", missing-EXIF false-positiving on every screenshot). No tests
+yet for `cv_features.py`'s QR decoding, the generator/render pipeline, or
+`apps/ai-service/` — those need real image fixtures or a running OCR/model
+stack and are a reasonable next step, not covered here.
+
 ## What this does *not* do yet
 
 - No genuine/legitimate-message dataset — only fraudulent-labeled sources exist so far.
