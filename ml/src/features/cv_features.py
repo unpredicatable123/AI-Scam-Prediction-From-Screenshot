@@ -71,6 +71,24 @@ def _decode_qr_codes(image_bgr):
     return payloads
 
 
+_URL_IN_PAYLOAD_RE = re.compile(r"https?://\S+", re.IGNORECASE)
+_UPI_IN_PAYLOAD_RE = re.compile(r"upi://\S+", re.IGNORECASE)
+
+
+def _clean_payload(payload: str) -> str:
+    """Extracts the actual URI from a decoded QR payload, tolerating junk
+    before/after it. Found necessary because this project's own
+    `data/raw/benign/` real-QR corpus turned out to encode a stringified
+    pandas Series repr instead of a clean URL (e.g. "0    https://...\\n
+    Name: url, dtype: object") — a data-generation bug upstream of this
+    code, not something worth re-rendering 5,992 images to fix when the
+    real value is trivially recoverable from the payload itself. A no-op
+    for an already-clean payload: the match starts at position 0 and
+    `\\S+` runs to the same end the whole string would have anyway."""
+    m = _URL_IN_PAYLOAD_RE.search(payload) or _UPI_IN_PAYLOAD_RE.search(payload)
+    return m.group(0) if m else payload
+
+
 def _classify_payload(payload):
     is_url = bool(re.match(r"^https?://", payload, re.IGNORECASE))
     is_payment_intent = payload.lower().startswith("upi://")
@@ -103,6 +121,8 @@ def extract_cv_features(image_path: str) -> dict:
 
     if not payloads:
         return _empty_features(forensics)
+
+    payloads = [_clean_payload(p) for p in payloads]
 
     classified = [_classify_payload(p) for p in payloads]
     is_url_any = any(c[0] for c in classified)
