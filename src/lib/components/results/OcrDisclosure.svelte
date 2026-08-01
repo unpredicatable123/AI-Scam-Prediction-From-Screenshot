@@ -118,8 +118,12 @@
 	const HIGHLIGHT_STYLES = {
 		search: 'background: color-mix(in oklch, var(--accent-secondary) 45%, transparent); color: var(--text-primary); border-radius: 3px;',
 		suspicious: 'background: color-mix(in oklch, var(--color-risk-high) 30%, transparent); color: var(--text-primary); border-radius: 3px; font-weight: 600;',
-		url: 'color: var(--accent-secondary); text-decoration: underline; text-decoration-style: dotted;',
-		phone: 'color: var(--accent-primary-strong); font-weight: 600;'
+		// `<mark>` has a browser-default yellow background (HTML5 UA stylesheet)
+		// that these two must explicitly cancel — without it, the default
+		// yellow collided with --accent-secondary's lime/yellow-green text
+		// color and made the highlighted text nearly unreadable.
+		url: 'background: transparent; color: var(--accent-secondary); text-decoration: underline; text-decoration-style: dotted;',
+		phone: 'background: transparent; color: var(--accent-primary-strong); font-weight: 600;'
 	};
 </script>
 
