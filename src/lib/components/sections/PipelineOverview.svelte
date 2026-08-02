@@ -42,7 +42,7 @@
 			gsap.set(desktopCardEls, { opacity: 0, scale: 0.92 });
 			gsap.set(dotEl, { left: '0%' });
 
-			const tl = scrollTimeline(sectionEl, { start: 'top 60%', end: 'bottom 25%', scrub: 0.6 });
+			const tl = scrollTimeline(sectionEl, { start: 'top 78%', end: 'bottom 25%', scrub: 0.6 });
 			const D = 4;
 			tl.to(dotEl, { left: '100%', duration: D, ease: 'none' }, 0);
 			nodes.forEach((n, i) => {

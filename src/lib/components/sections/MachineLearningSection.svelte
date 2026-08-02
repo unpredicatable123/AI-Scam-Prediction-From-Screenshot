@@ -41,7 +41,7 @@
 		gsap.set(barEls, { width: '0%' });
 		gsap.set(modelsEl, { opacity: 0, y: 12 });
 
-		const tl = scrollTimeline(sectionEl, { start: 'top 60%', end: 'bottom 25%', scrub: 0.6 });
+		const tl = scrollTimeline(sectionEl, { start: 'top 78%', end: 'bottom 25%', scrub: 0.6 });
 		tween = tl;
 		const D = 4;
 

@@ -37,7 +37,7 @@
 		gsap.set(reasonEls, { opacity: 0, x: -10 });
 		gsap.set(metersEl, { opacity: 0, y: 12 });
 
-		const tl = scrollTimeline(sectionEl, { start: 'top 62%', end: 'bottom 28%', scrub: 0.6 });
+		const tl = scrollTimeline(sectionEl, { start: 'top 78%', end: 'bottom 28%', scrub: 0.6 });
 		tween = tl;
 		const D = 4;
 
