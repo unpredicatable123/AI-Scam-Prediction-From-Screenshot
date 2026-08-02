@@ -37,7 +37,16 @@
 		gsap.set(reasonEls, { opacity: 0, x: -10 });
 		gsap.set(metersEl, { opacity: 0, y: 12 });
 
-		const tl = scrollTimeline(sectionEl, { start: 'top 78%', end: 'bottom 28%', scrub: 0.6 });
+		// This section (1220px) is taller than most viewports, so a
+		// height-relative end ('bottom X%') pushed the reveal's completion
+		// point far down the page — by the time everything finished
+		// appearing, the section's top (heading, first two reason bars) had
+		// already scrolled off above the fixed nav, leaving only the last
+		// bars + meters cramped at the very top, with a long dead scroll
+		// stretch below before the next section began. A fixed pixel
+		// distance keeps the reveal's completion tied to how far you've
+		// scrolled since entering, not to the section's total height.
+		const tl = scrollTimeline(sectionEl, { start: 'top 78%', end: '+=650', scrub: 0.6 });
 		tween = tl;
 		const D = 4;
 

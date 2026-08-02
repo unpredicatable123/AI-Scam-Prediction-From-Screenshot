@@ -41,7 +41,13 @@
 		gsap.set(barEls, { width: '0%' });
 		gsap.set(modelsEl, { opacity: 0, y: 12 });
 
-		const tl = scrollTimeline(sectionEl, { start: 'top 78%', end: 'bottom 25%', scrub: 0.6 });
+		// Fixed pixel end, not height-relative ('bottom X%') — this section
+		// (997px) is taller than most viewports, and a height-relative end
+		// pushes the reveal's completion point down with it, so the content
+		// finishes appearing only after part of it has already scrolled off
+		// above the nav. See ExplainableAiSection.svelte for the full
+		// writeup of this bug.
+		const tl = scrollTimeline(sectionEl, { start: 'top 78%', end: '+=600', scrub: 0.6 });
 		tween = tl;
 		const D = 4;
 
