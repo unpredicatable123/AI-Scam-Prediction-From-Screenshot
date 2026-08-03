@@ -20,12 +20,23 @@ AUTHORITY_WORDS = [
     "bank", "official", "support team", "customer service", "government",
     "irs", "tax", "police", "legal action", "compliance", "department",
     "administrator", "verified", "security team", "helpdesk", "head office",
+    # Added from real scam screenshots (2026-08-03) — fake traffic-fine/RTO
+    # messages weren't matching any authority word at all before this.
+    "rto notice", "challan", "traffic fine", "e-challan",
 ]
 
 REWARD_WORDS = [
     "congratulations", "winner", "won", "selected", "prize", "reward",
     "cashback", "bonus", "free", "guaranteed", "lucky", "claim your",
     "you have been chosen", "exclusive offer", "no risk",
+    # Added from real scam screenshots (2026-08-03) — the single most common
+    # real pattern found (12 of 31 confirmed real fraud examples): fake
+    # gaming/betting-wallet credit notifications. Checked against both the
+    # real and synthetic genuine sets first — none of these fire on a single
+    # genuine example in either.
+    "welcome bonus", "play and win", "deposit and play", "download and win",
+    "credited to your wallet", "wallet balance", "funds added",
+    "account has received",
 ]
 
 THREAT_WORDS = [
@@ -49,6 +60,10 @@ FEE_FRAMING_WORDS = [
     "registration fee", "processing fee", "processing charge", "security deposit",
     "verification fee", "handling fee", "gst", "customs fee", "clearance fee",
     "activation fee", "convenience fee",
+    # Added from real scam screenshots (2026-08-03) — loan-app fraud bait.
+    # Deliberately NOT adding the bare "loan application" — it fires on a
+    # real genuine example (an actual Bajaj Finserv loan-status message).
+    "business loan", "monthly interest", "credit score",
 ]
 
 CREDENTIAL_WORDS = [
@@ -96,6 +111,14 @@ LOTTERY_WORDS = [
 JOB_OFFER_WORDS = [
     "work from home", "part time job", "earn per day", "no experience required",
     "data entry job", "online job offer", "job vacancy", "flexible working hours",
+    # Added from real scam screenshots (2026-08-03). Deliberately NOT adding
+    # bare "internship" / "training program" / "recruiting" — each of those
+    # fires on real genuine synthetic examples (Enron emails discussing real
+    # internships/hiring: 17, 3, and 29 matches respectively), which would
+    # make the project's already-documented over-flagging problem worse.
+    # These more specific multi-word phrases tested clean against both the
+    # real and synthetic genuine sets.
+    "virtual internship", "daily salary", "personnel manager", "newcomers get",
 ]
 
 SHORTENER_DOMAINS = [
@@ -111,11 +134,18 @@ _lexicon_pattern_cache = {}
 
 def _lexicon_pattern(words):
     """Compiles a word-boundary regex for a lexicon, cached by identity of
-    the list object (the module-level lexicons never change at runtime)."""
+    the list object (the module-level lexicons never change at runtime).
+
+    Trailing `s?` tolerates simple plurals ("cashback"/"cashbacks") — found
+    missing a real scam entirely on 2026-08-03 because the word-boundary
+    match is exact and "cashbacks" shares no boundary with "cashback". Still
+    a real word-boundary match either way (not a bare substring check), so
+    this doesn't reintroduce the "now"-inside-"know" class of bug — `\bpins\b`
+    still won't match inside "pinstripe", for example."""
     key = id(words)
     if key not in _lexicon_pattern_cache:
         alternatives = "|".join(re.escape(w) for w in words)
-        _lexicon_pattern_cache[key] = re.compile(rf"\b(?:{alternatives})\b")
+        _lexicon_pattern_cache[key] = re.compile(rf"\b(?:{alternatives})s?\b")
     return _lexicon_pattern_cache[key]
 
 
